@@ -12,5 +12,5 @@ var vaultPath string
 
 func init() {
 	dir, _ := homedir.Dir()
-	vaultPath = filepath.Join(dir, "secrets.gob")
+	vaultPath = filepath.Join(dir, ".secrets")
 }

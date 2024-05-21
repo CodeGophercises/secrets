@@ -5,6 +5,7 @@ import (
 	"encoding/gob"
 	"io"
 	"os"
+	"sync"
 
 	"github.com/CodeGophercises/secrets/encrypt"
 )
@@ -21,8 +22,7 @@ func loadSecretsFile(masterPass string) (*bytes.Buffer, error) {
 			if err != nil {
 				return nil, err
 			}
-			var empty []byte
-			return bytes.NewBuffer(empty), nil
+			return bytes.NewBuffer(nil), nil
 
 		} else {
 			return nil, err
@@ -38,6 +38,9 @@ func loadSecretsFile(masterPass string) (*bytes.Buffer, error) {
 }
 
 func StoreInVault(key, value, masterPass string) error {
+	var mu sync.Mutex
+	mu.Lock()
+	defer mu.Unlock()
 	buf, err := loadSecretsFile(masterPass)
 	if err != nil {
 		return err
